@@ -1,0 +1,51 @@
+# Python Virtual Environments & Cache
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+dist/
+build/
+
+# Credentials, Secrets & Local Logs
+credentials.json
+token.json
+sent_emails.log
+med_diagnosis_changes.md
+
+# Large Datasets and Generated Binaries
+*.csv
+Ecommerce.csv
+models/
+figures/
+
+# Images & Documents
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.webp
+*.bmp
+*.tiff
+*.pdf
+*.xlsx
+*.xls
+*.docx
+*.doc
+*.pptx
+*.ppt
+
+# Telemetry & Analysis Markdown Files
+chapter_6_telemetry.md
+chapter_7_model_telemetry.md
+chapter_8_conclusions_telemetry.md
+agent_transfer_prompt.md
+test_case_scenarios.md
+
+# External Non-Project Assets
+chapter_5_assets/
+

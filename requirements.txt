@@ -1,0 +1,31 @@
+# ── Core Web Framework ─────────────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+pydantic
+
+# ── Data Science & Machine Learning ────────────────────────────────────────────
+pandas
+numpy
+scikit-learn
+xgboost
+lightgbm
+joblib
+
+# ── Google Generative AI (Gemini LLM Copilot) ──────────────────────────────────
+google-generativeai
+
+# ── Google Cloud / Gmail API (email sending feature) ───────────────────────────
+google-api-python-client
+google-auth-oauthlib
+google-auth
+
+# ── HTTP Client (OpenRouter & OpenAI API calls + verify_backend.py) ────────────
+requests
+
+# ── Environment Variables ───────────────────────────────────────────────────────
+python-dotenv
+
+# ── Visualization ─────────────────────────────────────────────────────────────
+matplotlib
+seaborn
+

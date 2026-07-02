@@ -1,0 +1,34 @@
+# Virtual environments & Cache
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Frontend files (Vercel hosting)
+frontend/
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Local Secrets & Credentials
+credentials.json
+token.json
+sent_emails.log
+med_diagnosis_changes.md
+
+# Figures & Plots
+figures/
+
+# Non-Project Assets & Telemetry
+chapter_5_assets/
+chapter_6_telemetry.md
+chapter_7_model_telemetry.md
+chapter_8_conclusions_telemetry.md
+agent_transfer_prompt.md
+test_case_scenarios.md
+DEPLOYMENT_GUIDE.md
+dataset_documentation.md

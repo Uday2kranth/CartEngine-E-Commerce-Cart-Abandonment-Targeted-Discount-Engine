@@ -63,7 +63,7 @@
 
 - [x] **2.3 · Frontend VITE_API_URL Configuration** — ✅ Already done. `frontend/src/config.js` already reads `import.meta.env.VITE_API_URL || ""`. Just add `VITE_API_URL` env var on Vercel dashboard.
 
-- [ ] **2.4 · Frontend on Vercel**
+- [x] **2.4 · Frontend on Vercel**
   - Guide: Set Root Directory = `frontend`, Framework = Vite, add `VITE_API_URL` env var.
   - ⚡ **Token cost: NONE** — Instructions only.
 

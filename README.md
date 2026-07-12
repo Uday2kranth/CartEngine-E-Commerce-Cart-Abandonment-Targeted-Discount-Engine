@@ -33,9 +33,16 @@ pinned: false
 ## 1. Project Overview & Problem Statement
 
 ### The Real-World Business Problem
-Cart abandonment is the **#1 revenue leakage point** in digital commerce — globally, 70–80% of shoppers who add items to carts never check out. Conventional responses (blanket 20% discount emails) either erode margins unnecessarily or miss price-insensitive shoppers entirely.
+Cart abandonment is the **#1 revenue leakage point** in digital commerce — globally, 70–80% of shoppers who add items to carts never check out. 
 
-**CartEngine** solves this by:
+### Current System (The Status Quo)
+Most e-commerce platforms handle cart abandonment using a "one-size-fits-all" approach. They typically send blanket discount emails (e.g., a flat 20% off) to all users who abandon their carts. This current system is flawed because:
+- It **erodes profit margins unnecessarily** by giving large discounts to shoppers who might have purchased anyway or only needed a small nudge (like 5%).
+- It **fails to distinguish** between price-sensitive and price-insensitive shoppers.
+- It relies on **static rules** rather than acting on real-time behavioral data (device type, time on site, product category).
+
+### Proposed Solution (CartEngine)
+**CartEngine** is the proposed solution that replaces these static rules with a dynamic, machine-learning-driven approach. It solves the problem by:
 
 1. **Predicting Abandonment Risk:** An XGBoost binary classifier learns from 25,000 historical customer sessions to estimate the probability that a specific shopper will abandon based on behavioral signals (device type, pages viewed, session duration, marketing channel, product category, unit price, discount offered, etc.).
 
@@ -62,6 +69,18 @@ Cart abandonment is the **#1 revenue leakage point** in digital commerce — glo
 ---
 
 ## 2. System Architecture & Connection Flow
+
+### Data Flow Architecture
+
+When a user interacts with the CartEngine application, data moves through the system in the following sequence:
+
+1. **Client Interaction:** The user accesses the React/Vite frontend and interacts with the dashboard or simulator.
+2. **API Request:** The frontend compiles the user's input (e.g., session parameters for a discount simulation) into a JSON payload and sends an HTTP POST/GET request to the FastAPI backend.
+3. **Data Preprocessing:** The FastAPI backend receives the request, validates it using Pydantic schemas, and transforms numerical features using the cached `scaler.joblib`.
+4. **Model Inference:** The preprocessed data array is fed into the in-memory `XGBoost` model (`cart_abandonment_model.joblib`) to predict the cart abandonment probability.
+5. **Optimization Engine:** For discount simulations, the backend calculates the expected revenue across 7 different discount tiers to find the profit-maximizing discount.
+6. **Response Delivery:** The backend returns the final prediction, optimal discount, and projected revenue back to the frontend to update the React UI.
+7. **AI Copilot (Optional):** If the user asks a question or generates an email, the backend routes the prompt + real-time model metrics to an external LLM (Gemini/OpenAI/OpenRouter) and returns the generated response to the user.
 
 ### Component Diagram
 

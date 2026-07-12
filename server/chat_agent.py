@@ -530,7 +530,8 @@ def call_nvidia(
     
     payload = {
         "model": model,
-        "messages": messages
+        "messages": messages,
+        "max_tokens": 1024
     }
     
     try:
@@ -538,7 +539,7 @@ def call_nvidia(
             "https://integrate.api.nvidia.com/v1/chat/completions",
             headers=headers,
             json=payload,
-            timeout=30
+            timeout=60
         )
         if response.status_code != 200:
             return f"Nvidia API Error: {response.status_code} - {response.text}"

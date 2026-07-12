@@ -265,31 +265,31 @@ const ChatDrawer = ({ serverKeys = {} }) => {
                 )}
                 {provider === 'openrouter' && (
                   <>
+                    <option value="openrouter/free">randome free model roulette</option>
                     <option value="openrouter/owl-alpha">Owl Alpha</option>
                     <option value="nvidia/nemotron-3-ultra-550b-a55b:free">NVIDIA: Nemotron 3 Ultra (free)</option>
                     <option value="google/gemma-4-31b-it:free">Google: Gemma 4 31B (free)</option>
                     <option value="poolside/laguna-m.1:free">Poolside: Laguna M.1 (free)</option>
-                    <option value="nvidia/nemotron-3-super-120b-a12b:free">NVIDIA: Nemotron 3 Super (free) (agentic)</option>
+                    <option value="nvidia/nemotron-3-super-120b-a12b:free">NVIDIA: Nemotron 3 Super (free)</option>
                     <option value="openai/gpt-oss-120b:free">OpenAI: gpt-oss-120b (free)</option>
                     <option value="poolside/laguna-xs.2:free">Poolside: Laguna XS.2 (free)</option>
                     <option value="cohere/north-mini-code:free">Cohere: North Mini Code (free)</option>
-                    <option value="openrouter/free">randome free model roulette (agentic)</option>
-                    <option value="cognitivecomputations/dolphin-mistral-24b-venice-edition:free">Venice: Uncensored (free) (agentic)</option>
+                    <option value="cognitivecomputations/dolphin-mistral-24b-venice-edition:free">Venice: Uncensored (free)</option>
                     <option value="openai/gpt-oss-20b:free">OpenAI: gpt-oss-20b (free)</option>
                     <option value="nvidia/nemotron-3-nano-30b-a3b:free">NVIDIA: Nemotron 3 Nano 30B A3B (free)</option>
                     <option value="google/gemma-4-26b-a4b-it:free">Google: Gemma 4 26B A4B (free)</option>
                     <option value="nvidia/nemotron-nano-9b-v2:free">NVIDIA: Nemotron Nano 9B V2 (free)</option>
-                    <option value="nousresearch/hermes-3-llama-3.1-405b:free">Nous Research: Hermes 3 Llama 3.1 405B (free) (agentic)</option>
-                    <option value="qwen/qwen3-coder:free">Qwen: Qwen3 Coder 480B A35B (free) (agentic)</option>
-                    <option value="meta-llama/llama-3.3-70b-instruct:free">Meta: Llama 3.3 70B Instruct (free) (agentic)</option>
+                    <option value="nousresearch/hermes-3-llama-3.1-405b:free">Nous Research: Hermes 3 Llama 3.1 405B (free)</option>
+                    <option value="qwen/qwen3-coder:free">Qwen: Qwen3 Coder 480B A35B (free)</option>
+                    <option value="meta-llama/llama-3.3-70b-instruct:free">Meta: Llama 3.3 70B Instruct (free)</option>
                   </>
                 )}
                 {provider === 'nvidia' && (
                   <>
-                    <option value="nvidia/nemotron-3-ultra-550b-a55b:free">NVIDIA: Nemotron 3 Ultra (free)</option>
-                    <option value="nvidia/nemotron-3-super-120b-a12b:free">NVIDIA: Nemotron 3 Super (free) (agentic)</option>
-                    <option value="nvidia/nemotron-3-nano-30b-a3b:free">NVIDIA: Nemotron 3 Nano 30B A3B (free)</option>
-                    <option value="nvidia/nemotron-nano-9b-v2:free">NVIDIA: Nemotron Nano 9B V2 (free)</option>
+                    <option value="qwen/qwen3.5-397b-a17b">Qwen 3.5 397B A17B (Nvidia NIM)</option>
+                    <option value="minimaxai/minimax-m2.5">MiniMax M2.5 (Nvidia NIM)</option>
+                    <option value="openai/gpt-oss-120b">OpenAI gpt-oss-120b (Nvidia NIM)</option>
+                    <option value="sarvamai/sarvam-m">Sarvam AI (Nvidia NIM)</option>
                   </>
                 )}
               </select>

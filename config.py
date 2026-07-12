@@ -44,3 +44,23 @@ NUMERIC_FEATURES = [
 ]
 
 FEATURES = CATEGORICAL_FEATURES + NUMERIC_FEATURES
+
+# ============================================================
+# GOOGLE MODELS
+# ============================================================
+# Standard recommended model for agentic loops, speed, and tool calling
+GEMINI_2_0_FLASH = "gemini-2.0-flash"
+
+# Advanced model optimized for complex reasoning or code generation tasks
+GEMINI_2_5_FLASH = "gemini-2.5-flash"
+
+# Reliable legacy version
+GEMINI_1_5_FLASH = "gemini-1.5-flash"
+
+# High-intelligence model with a massive 2-million token context window
+GEMINI_1_5_PRO = "gemini-1.5-pro"
+
+# Production version-pinned identifiers
+GEMINI_2_0_FLASH_STABLE = "gemini-2.0-flash-001"
+GEMINI_1_5_FLASH_STABLE = "gemini-1.5-flash-002"
+GEMINI_1_5_PRO_STABLE   = "gemini-1.5-pro-002"

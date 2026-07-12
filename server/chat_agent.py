@@ -564,9 +564,12 @@ def call_nvidia(
     payload = {
         "model": model,
         "messages": messages,
-        "max_tokens": 1024,
-        "tools": tools_schema
+        "max_tokens": 1024
     }
+    
+    # Exclude tools for models that don't support them to prevent 400 errors
+    if "sarvam" not in model.lower():
+        payload["tools"] = tools_schema
     
     try:
         response = requests.post(
@@ -714,7 +717,7 @@ CRITICAL SYSTEM INSTRUCTIONS & GUARDRAILS:
 9. MITIGATION & QUALITY UPDATES: Offer concrete improvement plans or parameter mitigation tweaks (pricing, data acquisition cost, preprocessing modifications, sensor/feature counts) to compensate for weaknesses identified in the model.
 10. COMPETITOR & PIVOT ADVICE: Propose market comparisons and strategic pivots based on high-performing secondary features.
 11. AMBIGUITY DETECTION & CLARIFICATION: Detect when user prompts are vague, incomplete, or ambiguous. Instead of guessing or hallucinating details, ask for clarification using structured questions (e.g., bulleted options or simple multiple-choice questions) explaining what specific information is needed and why.
-12. PROMOTIONAL EMAIL & PROMO CODES: When the user asks to email a discount to a customer, you MUST generate a warm, polished customer-facing marketing recovery email. You MUST auto-generate a suitable promotional coupon code (e.g. `SAVE10` for 10%, `RECOVER15` for 15%, `OFFER20` for 20%) based on the simulated discount, and embed this promo code inside the email body.
+12. PROMOTIONAL EMAIL & PROMO CODES: When the user asks to email a discount to a customer, you MUST generate a warm, polished customer-facing marketing recovery email. You MUST auto-generate a suitable promotional coupon code (e.g. `SAVE10` for 10%, `RECOVER15` for 15%, `OFFER20` for 20%) based on the simulated discount, and embed this promo code inside the email body. You MUST ALSO IMMEDIATELY execute the `send_email_tool` to dispatch this email in the SAME turn. Do not ask for permission or wait for a second prompt; use the tool right away!
     - **STRICT FORBIDDEN CONTENT:** Never include technical model metrics, confusion matrices, dataset statistics, JSON logs, or any internal data structures in the email body sent to the customer.
     - **ADVICE TO E-COMMERCE OWNER:** In your chat response to the owner, explain the best course of action (e.g., that the customer was identified as high-risk, offering a 15% discount has the maximum expected conversion lift, and a recovery email with promo code `SAVE15` has been sent).
 """

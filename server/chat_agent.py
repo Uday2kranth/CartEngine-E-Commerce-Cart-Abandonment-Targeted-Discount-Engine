@@ -508,6 +508,46 @@ def call_openai(
     except Exception as e:
         return f"OpenAI Connection Error: {str(e)}"
 
+def call_nvidia(
+    message: str,
+    history: List[Dict[str, str]],
+    model: str,
+    api_key: str,
+    system_instruction: str
+) -> str:
+    import requests
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    messages = [{"role": "system", "content": system_instruction}]
+    for msg in history:
+        role = "user" if msg["role"] == "user" else "assistant"
+        messages.append({"role": role, "content": msg["content"]})
+    messages.append({"role": "user", "content": message})
+    
+    payload = {
+        "model": model,
+        "messages": messages
+    }
+    
+    try:
+        response = requests.post(
+            "https://integrate.api.nvidia.com/v1/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=30
+        )
+        if response.status_code != 200:
+            return f"Nvidia API Error: {response.status_code} - {response.text}"
+            
+        data = response.json()
+        return data["choices"][0]["message"]["content"]
+    except Exception as e:
+        return f"Nvidia Connection Error: {str(e)}"
+
 def generate_key_diagnostic(raw_key: str, cleaned_key: str, provider: str, model: str) -> str:
     has_quotes = raw_key.startswith(("'", '"')) or raw_key.endswith(("'", '"'))
     has_whitespace = raw_key != raw_key.strip()
@@ -542,6 +582,11 @@ def generate_key_diagnostic(raw_key: str, cleaned_key: str, provider: str, model
         if not cleaned_key.startswith("sk-or-"):
             report += "⚠️ **Warning: Your key does NOT start with `sk-or-`.** Please ensure you are copying a valid OpenRouter API key."
             
+    elif provider == "nvidia":
+        report += "- **Nvidia NIM Check:** Standard Nvidia NIM API keys typically start with the prefix **`nvapi-`**. "
+        if not cleaned_key.startswith("nvapi-"):
+            report += "⚠️ **Warning: Your key does NOT start with `nvapi-`.** Please ensure you are copying a valid Nvidia NIM API key."
+            
     return report
 
 def chat_response(
@@ -564,6 +609,8 @@ def chat_response(
             raw_api_key = os.environ.get("OPENROUTER_API_KEY")
         elif chat_provider == "openai":
             raw_api_key = os.environ.get("OPENAI_API_KEY")
+        elif chat_provider == "nvidia":
+            raw_api_key = os.environ.get("NVIDIA_API_KEY")
         else:
             raw_api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
 
@@ -613,9 +660,14 @@ CRITICAL SYSTEM INSTRUCTIONS & GUARDRAILS:
 
     # Route based on provider
     if chat_provider == "nvidia":
-        chat_provider = "openrouter"
+        reply = call_nvidia(message, history, chat_model, api_key, system_instruction)
+        if "API Error" in reply or "Connection Error" in reply:
+            reply += generate_key_diagnostic(raw_api_key, api_key, chat_provider, chat_model)
+        history.append({"role": "user", "content": message})
+        history.append({"role": "model", "content": reply})
+        return reply
         
-    if chat_provider == "openrouter":
+    elif chat_provider == "openrouter":
         reply = call_openrouter(message, history, chat_model, api_key, system_instruction)
         if "API Error" in reply or "Connection Error" in reply:
             reply += generate_key_diagnostic(raw_api_key, api_key, chat_provider, chat_model)
@@ -703,6 +755,10 @@ def generate_copywriter_text(
     if provider == "openrouter":
         system_instruction = "You are a creative e-commerce copywriter. Generate marketing copy based on parameters."
         return call_openrouter(prompt, [], model, cleaned_key, system_instruction)
+        
+    elif provider == "nvidia":
+        system_instruction = "You are a creative e-commerce copywriter. Generate marketing copy based on parameters."
+        return call_nvidia(prompt, [], model, cleaned_key, system_instruction)
         
     elif provider == "openai":
         system_instruction = "You are a creative e-commerce copywriter. Generate marketing copy based on parameters."

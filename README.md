@@ -10,6 +10,8 @@ pinned: false
 
 # CartEngine Targeted Discount System
 
+🚀 **Live Application:** [https://cart-engine-e-commerce-cart-abandon.vercel.app/](https://cart-engine-e-commerce-cart-abandon.vercel.app/)
+
 **CartEngine** is a full-stack machine learning dashboard that predicts whether a customer will abandon their e-commerce cart and then recommends the **profit-maximizing discount** to maximize expected order revenue. It combines a trained **XGBoost classifier** (Python/FastAPI backend) with a modern **React/Vite** analytics frontend, a floating **AI Copilot** (powered by Gemini, OpenAI, or OpenRouter), an automated **marketing email generator**, and a standalone **R academic pipeline** for statistical analysis.
 
 ---
@@ -101,7 +103,7 @@ graph TD
     RScript[Rscript academic_pipeline.R] -->|read.csv| EcommerceCSV[Ecommerce.csv]
     RScript -->|write.csv| CleanedCSV[cleaned_data.csv]
 
-    subgraph Frontend — React/Vite
+    subgraph Frontend [Frontend — React/Vite]
         App[App.jsx — page manager]
         Sidebar[Sidebar.jsx — navigation]
         ChatDrawer[ChatDrawer.jsx — AI Copilot]
@@ -111,7 +113,7 @@ graph TD
         Predict[Predict.jsx — discount optimizer simulator]
     end
 
-    subgraph Backend — Python FastAPI
+    subgraph Backend [Backend — Python FastAPI]
         ServerMain[server/main.py — API routes]
         ChatAgent[server/chat_agent.py — LLM & email tools]
         Config[config.py — global settings]

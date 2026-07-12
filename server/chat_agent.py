@@ -528,10 +528,44 @@ def call_nvidia(
         messages.append({"role": role, "content": msg["content"]})
     messages.append({"role": "user", "content": message})
     
+    tools_schema = [
+        {
+            "type": "function",
+            "function": {
+                "name": "send_email_tool",
+                "description": "Sends a polished customer-facing promotional recovery email containing an auto-generated discount promo code to a customer's email address.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "recipient": {"type": "string", "description": "Recipient email address"},
+                        "subject": {"type": "string", "description": "Email subject line"},
+                        "body": {"type": "string", "description": "Email body content formatted in markdown"}
+                    },
+                    "required": ["recipient", "subject", "body"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "search_web",
+                "description": "Searches the internet for general solutions, e-commerce strategies, sales viability, or cart abandonment insights.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {"type": "string", "description": "The search query to search online"}
+                    },
+                    "required": ["query"]
+                }
+            }
+        }
+    ]
+    
     payload = {
         "model": model,
         "messages": messages,
-        "max_tokens": 1024
+        "max_tokens": 1024,
+        "tools": tools_schema
     }
     
     try:
@@ -545,7 +579,33 @@ def call_nvidia(
             return f"Nvidia API Error: {response.status_code} - {response.text}"
             
         data = response.json()
-        return data["choices"][0]["message"]["content"]
+        choice = data["choices"][0]["message"]
+        
+        # Check if the model triggered a tool call
+        if "tool_calls" in choice and choice["tool_calls"]:
+            for tool_call in choice["tool_calls"]:
+                func = tool_call["function"]
+                if func["name"] == "send_email_tool":
+                    try:
+                        args = json.loads(func["arguments"])
+                    except Exception:
+                        args = {}
+                    tool_result = send_email_tool(
+                        recipient=args.get("recipient", ""),
+                        subject=args.get("subject", ""),
+                        body=args.get("body", "")
+                    )
+                    return f"**[AI Copilot triggered Email Dispatcher Tool]**\n\n{tool_result}\n\nHere is the report that was attempted to send:\n\n{args.get('body', '')}"
+                elif func["name"] == "search_web":
+                    try:
+                        args = json.loads(func["arguments"])
+                    except Exception:
+                        args = {}
+                    query = args.get("query", "")
+                    search_result = search_web_duckduckgo(query)
+                    return f"**[AI Copilot triggered Web Search Tool for: *{query}*]**\n\n{search_result}"
+        
+        return choice.get("content") or "No response content received."
     except Exception as e:
         return f"Nvidia Connection Error: {str(e)}"
 
@@ -664,6 +724,7 @@ CRITICAL SYSTEM INSTRUCTIONS & GUARDRAILS:
         reply = call_nvidia(message, history, chat_model, api_key, system_instruction)
         if "API Error" in reply or "Connection Error" in reply:
             reply += generate_key_diagnostic(raw_api_key, api_key, chat_provider, chat_model)
+            return reply
         history.append({"role": "user", "content": message})
         history.append({"role": "model", "content": reply})
         return reply
@@ -672,6 +733,7 @@ CRITICAL SYSTEM INSTRUCTIONS & GUARDRAILS:
         reply = call_openrouter(message, history, chat_model, api_key, system_instruction)
         if "API Error" in reply or "Connection Error" in reply:
             reply += generate_key_diagnostic(raw_api_key, api_key, chat_provider, chat_model)
+            return reply
         history.append({"role": "user", "content": message})
         history.append({"role": "model", "content": reply})
         return reply
@@ -680,6 +742,7 @@ CRITICAL SYSTEM INSTRUCTIONS & GUARDRAILS:
         reply = call_openai(message, history, chat_model, api_key, system_instruction)
         if "API Error" in reply or "Connection Error" in reply:
             reply += generate_key_diagnostic(raw_api_key, api_key, chat_provider, chat_model)
+            return reply
         history.append({"role": "user", "content": message})
         history.append({"role": "model", "content": reply})
         return reply

@@ -8,7 +8,7 @@ app_port: 7860
 pinned: false
 ---
 
-# CartEngine — E-Commerce Cart Abandonment & Targeted Discount Engine
+# CartEngine Targeted Discount System
 
 **CartEngine** is a full-stack machine learning dashboard that predicts whether a customer will abandon their e-commerce cart and then recommends the **profit-maximizing discount** to maximize expected order revenue. It combines a trained **XGBoost classifier** (Python/FastAPI backend) with a modern **React/Vite** analytics frontend, a floating **AI Copilot** (powered by Gemini, OpenAI, or OpenRouter), an automated **marketing email generator**, and a standalone **R academic pipeline** for statistical analysis.
 
